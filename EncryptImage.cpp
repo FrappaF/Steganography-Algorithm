@@ -38,10 +38,10 @@ int main(int argc, char *argv[]) {
 	short channel = atoi(argv[3]);  //Which channel to encrypt (0 for red, 1 for green, 2 for blue).
 	char *message = argv[2];        //The message to encrypt.
 	
-  CImg<unsigned char> image(argv[1]), secret(argv[1]);    //Read the image
+  	CImg<unsigned char> image(argv[1]), secret(argv[1]);    //Read the image
 	
 
-  short shift = 0;    //Which bit to take in consideration.
+  	short shift = 0;    //Which bit to take in consideration.
 	int index = 0;      //Which character to take in consideration.
 	char character;     //The character to encrypt.
 
@@ -51,31 +51,29 @@ int main(int argc, char *argv[]) {
 			if(index < strlen(message)+1 || shift != 8){    //If we can encrypt another character of the message
 				                                              //or we have to encrypt the null character we can go.  
 
-        if(index == strlen(message) && shift == 8){   //IF we are at the end of the message we put the null character.   
+        			if(index == strlen(message) && shift == 8){   //IF we are at the end of the message we put the null character.   
 					character = '\0'; 
 					++index;
 				}
 				
 				shift = shift % 8;                          
-				
+
 				if(shift == 0 && index < strlen(message)){	  //Load next character.
 					character = message[index++];
 				}
-				
+
 				printf("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 				printf("[DEBUG] character = %c shift = %d\n", character, shift);
-
 				unsigned char *c = image.data(w, h, 0, channel);    //Original value of the pixel.
-
 				printf("[DEBUG] image(%d, %d, 0, %d) = ", w, h, channel);
 				printBits(sizeof(unsigned char), c);
-				
+
 				unsigned char flag = (character & (1 << shift));    //Obtain the bit of the character we want.
 				flag >>= shift;                                     //Putting at the first position so we can have 1 or 0
 				flag = flag | MASK;                                 //Creating the mask (flag can be 254 if last bit was 0 or 255 if the last bit was 1). 
-				
+
 				printf("\tflag = %d\n", flag);
-        
+
 				if(*secret.data(w, h, 0, channel) % 2 == 0){       //If the pixel has 0 as first bit
 					if(flag % 2 != 0){                               //Change the value if flag is 255.
 						secret(w, h, 0, channel) = *secret.data(w, h, 0, channel) + 1;	
@@ -89,9 +87,9 @@ int main(int argc, char *argv[]) {
 
 				printf("[DEBUG] secret(%d, %d, 0, %d) = ", w, h, channel);
 				printBits(1, &secret(w, h, 0, channel));
-				
-				++shift;
-        printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+
+					++shift;
+				printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
 			}
 		}
 	}
