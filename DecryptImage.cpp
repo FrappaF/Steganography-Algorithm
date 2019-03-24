@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 	
 	unsigned short channel = atoi(argv[3]);   //Set the channel where read the message.
 	
-  CImg<unsigned char> image(argv[1]);       //Load the encrypted image.
+  	CImg<unsigned char> image(argv[1]);       //Load the encrypted image.
 	 
 	short shift = 0;        //Which bit to take in consideration.
 	char chara = 0;     //The chara to decrypt.
@@ -52,25 +52,25 @@ int main(int argc, char *argv[]) {
         printf("-=--=--=--=--=--=--=--=--=--=--=--=--=-\n");
         
         if(shift == 8){	                          //If we have all the 8 bits we can print next char.
-					printf("[DEBUG] built the char %c\n", chara);
-					fprintf(FOut, "%c", chara);
-					chara = 0;
-				}
+		printf("[DEBUG] built the char %c\n", chara);
+		fprintf(FOut, "%c", chara);
+		chara = 0;
+	}
 			
-				shift = shift % 8;
+	shift = shift % 8;
 
-				unsigned char *c = image.data(w, h, 0, channel);    //Read the value of the pixel.
+	unsigned char *c = image.data(w, h, 0, channel);    //Read the value of the pixel.
 
-				printf("[DEBUG] image(%d, %d, 0, %d) = ", w, h, channel); 
-				printBits(sizeof(unsigned char), c);
+	printf("[DEBUG] image(%d, %d, 0, %d) = ", w, h, channel); 
+	printBits(sizeof(unsigned char), c);
 				
-				unsigned char flag = *c & 1;    //Take the first bit of the pixel.
+	unsigned char flag = *c & 1;    //Take the first bit of the pixel.
 	
-				chara = chara | flag << shift;    //Put the bit in the char at shift position.
-				printf("\tchar bits = ");
-				printBits(1, &chara);
+	chara = chara | flag << shift;    //Put the bit in the char at shift position.
+	printf("\tchar bits = ");
+	printBits(1, &chara);
 			
-				++shift;
+	++shift;
         
         printf("-=--=--=--=--=--=--=--=--=--=--=--=--=-\n");
 			}
